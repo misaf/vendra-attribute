@@ -48,7 +48,7 @@
 			"type": "path",
 			"url": "../vendra-support",
 			"options": {
-				"symlink": true
+				"symlink": false
 			}
 		}
 	],
