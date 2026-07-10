@@ -11,6 +11,7 @@ use Misaf\VendraAttribute\Filament\Clusters\AttributesCluster;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\Pages\CreateAttribute;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\Pages\EditAttribute;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\Pages\ListAttributes;
+use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\RelationManagers\AttributeValueRelationManager;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\Schemas\AttributeForm;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\Tables\AttributeTable;
 use Misaf\VendraAttribute\Models\Attribute;
@@ -48,6 +49,13 @@ final class AttributeResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return trans_choice('vendra-attribute::navigation.attributes', 1);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            AttributeValueRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
