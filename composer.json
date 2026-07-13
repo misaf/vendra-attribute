@@ -1,6 +1,5 @@
 {
     "name": "misaf/vendra-attribute",
-    "version": "0.0.7",
     "description": "Reusable tenant-aware attributes and polymorphic values for Vendra models",
     "license": "MIT",
     "type": "vendra-module",
@@ -35,13 +34,13 @@
         }
     },
     "extra": {
+        "branch-alias": {
+            "dev-master": "0.0.x-dev"
+        },
         "laravel": {
             "providers": [
                 "Misaf\\VendraAttribute\\Providers\\AttributeServiceProvider"
             ]
-        },
-        "branch-alias": {
-            "dev-master": "13.x-dev"
         }
     },
     "scripts": {
