@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraAttribute\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraAttribute\AttributePlugin;
@@ -31,7 +30,7 @@ final class AttributeServiceProvider extends PackageServiceProvider
             ->name('vendra-attribute')
             ->hasConfigFile()
             ->hasTranslations()
-            ->hasMigrations(['create_attributes_table'])
+            ->hasMigrations(['create_attributes_table', 'create_attribute_value_selections_table'])
             ->hasCommands(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-attribute');
@@ -61,5 +60,4 @@ final class AttributeServiceProvider extends PackageServiceProvider
 
         AboutCommand::add('Vendra Attribute', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-attribute')]);
     }
-
 }

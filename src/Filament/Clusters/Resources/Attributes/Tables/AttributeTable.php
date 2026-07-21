@@ -9,6 +9,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\SpatieTagsColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -91,8 +92,13 @@ final class AttributeTable
 
         return $table
             ->columns($columns)
+            ->description(__('vendra-attribute::tables.description.attributes'))
+            ->emptyStateHeading(__('vendra-attribute::tables.empty_state.heading.attributes'))
+            ->emptyStateDescription(__('vendra-attribute::tables.empty_state.description.attributes'))
+            ->emptyStateIcon(Heroicon::OutlinedAdjustmentsHorizontal)
             ->recordActions([
                 ActionGroup::make([
+                    ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),
                 ]),
@@ -114,6 +120,4 @@ final class AttributeTable
             ], layout: FiltersLayout::AboveContentCollapsible)
             ->reorderable('position', direction: 'desc');
     }
-
-
 }

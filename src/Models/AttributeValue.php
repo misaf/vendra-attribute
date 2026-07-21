@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Misaf\VendraAttribute\Database\Factories\AttributeValueFactory;
+use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Traits\BelongsToTenant;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -31,9 +33,9 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property Carbon|null $deleted_at
  */
 #[Fillable(['attribute_id', 'value', 'position'])]
-#[Hidden(['tenant_id', 'attributable_type', 'attributable_id'])]
+#[Hidden(['tenant_id', 'attributable_type', 'attributable_id', 'active_value_guard'])]
 #[UseFactory(AttributeValueFactory::class)]
-final class AttributeValue extends Model implements Sortable
+final class AttributeValue extends Model implements ShouldLogActivity, Sortable
 {
     use BelongsToTenant;
 
@@ -49,6 +51,18 @@ final class AttributeValue extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
+    /**
+     * The DB-level cascade on attribute_value_selections only fires on hard
+     * deletes, so soft deletes must detach selections themselves; restoring
+     * a value intentionally does not resurrect them.
+     */
+    protected static function booted(): void
+    {
+        self::deleted(function (self $attributeValue): void {
+            $attributeValue->selections()->delete();
+        });
+    }
+
     /** @return BelongsTo<Attribute, $this> */
     public function attribute(): BelongsTo
     {
@@ -59,6 +73,17 @@ final class AttributeValue extends Model implements Sortable
     public function attributable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * The entities that selected this attribute value through the
+     * attribute_value_selections pivot.
+     *
+     * @return HasMany<AttributeValueSelection, $this>
+     */
+    public function selections(): HasMany
+    {
+        return $this->hasMany(AttributeValueSelection::class);
     }
 
     /** @return array<string, string> */

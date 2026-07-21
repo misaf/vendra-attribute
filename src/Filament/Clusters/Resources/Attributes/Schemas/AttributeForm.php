@@ -47,7 +47,7 @@ final class AttributeForm
             Toggle::make('status')
                 ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.status'))
                 ->columnSpanFull()
-                ->default(false)
+                ->default(true)
                 ->label(__('vendra-attribute::attributes.status'))
                 ->onIcon(Heroicon::Bolt)
                 ->required()
@@ -67,5 +67,4 @@ final class AttributeForm
             ->components($components)
             ->columns(2);
     }
-
 }
